@@ -1,0 +1,65 @@
+﻿@model BlogApplication.Models.BlogPost
+@{
+    ViewBag.Title = "Post";
+}
+
+<!-- Page Header -->
+<!-- Set your background image for this header on the line below. -->
+<header class="intro-header" style="background-image: url('@Model.MediaURL')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>@Html.DisplayFor(model => model.Title)</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by Mack Hatcher on @Html.DisplayFor(model => model.Created)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p> @Html.Raw(Model.Body)</p>
+            </div>
+        </div>
+    </div>
+</article>
+<hr>
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="http://www.facebook.com/">
+                            <span class="fa-stack fa-lg">
+                                <i class="fab fa-facebook-f"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.linkedin.com/in/mackenzie-hatcher-37413316a/">
+                            <span class="fa-stack fa-lg">
+                                <i class="fab fa-linkedin-in"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/MackHatcher">
+                            <span class="fa-stack fa-lg">
+                                <i class="fab fa-github"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Your Website 2016</p>
+            </div>
+        </div>
+    </div>
+</footer>
+

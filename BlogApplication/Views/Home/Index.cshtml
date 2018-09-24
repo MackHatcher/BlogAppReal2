@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+@model IEnumerable<BlogApplication.Models.BlogPost>
+
+
+
+
+
+
+
+<!-- Page Header -->
+<!-- Set your background image for this header on the line below. -->
+<header class="intro-header" style="background-image: url('../../img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading">
+                    <h1>Mack's Blog Project</h1>
+                    <hr class="small">
+                    <span class="subheading">A Simple Blog By a Simple Coder</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-preview">
+
+                @foreach (var item in Model)
+                {
+                    
+                <h1 class="post-title">
+                    @Html.ActionLink(item.Title, "Index", "BlogPosts")
+                </h1>
+                    <h4 class="post-subtitle">
+                        Created: @item.Created
+                    </h4>
+                    <h4 class="post-subtitle">
+                        Updated:
+                        @if (item.Updated != null)
+                        {
+                            @item.Updated
+                        }
+
+
+                    </h4>
+                    <p>
+                        @if (item.MediaURL != null)
+                        {
+
+                            <img class="img-responsive" src="@item.MediaURL" alt="">
+                        }
+                    </p>
+
+                    @Html.Raw(item.Body)
+                }
+
+                <!-- Pager -->
+                <ul class="pager">
+                    <li class="next">
+                        @Html.ActionLink("Post Archive", "Index", "BlogPosts")
+                    </li>
+                </ul>
+            </div>
+    </div>
+</div>
+</div>
+
+<hr>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fab fa-facebook-f"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fab fa-linkedin-in"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fab fa-github"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Your Website 2016</p>
+            </div>
+        </div>
+    </div>
+</footer>
