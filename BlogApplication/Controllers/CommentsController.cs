@@ -10,6 +10,7 @@ using BlogApplication.Models;
 
 namespace BlogApplication
 {
+    [RequireHttps]
     public class CommentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -17,7 +18,7 @@ namespace BlogApplication
         // GET: Comments
         public ActionResult Index()
         {
-            var comments = db.Comments.Include(c => c.Author);
+            var comments = db.Comments.Include(c => c.Author).Include(c=> c.BlogPost);
             return View(comments.ToList());
         }
 
@@ -40,6 +41,7 @@ namespace BlogApplication
         public ActionResult Create()
         {
             ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName");
+            ViewBag.BlogPostId = new SelectList(db.Posts, "Id", "Title");
             return View();
         }
 
@@ -58,10 +60,12 @@ namespace BlogApplication
             }
 
             ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
+            ViewBag.BlogPostId = new SelectList(db.Posts, "Id", "Title", comment.BlogPostId);
             return View(comment);
         }
 
         // GET: Comments/Edit/5
+        [Authorize(Roles ="Admin,Moderator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -73,7 +77,7 @@ namespace BlogApplication
             {
                 return HttpNotFound();
             }
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
+            
             return View(comment);
         }
 
@@ -82,19 +86,26 @@ namespace BlogApplication
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,PostId,Body,AuthorId,Created,Updated,UpdateReason")] Comment comment)
+        [Authorize(Roles ="Admin,Moderator")]
+        public ActionResult Edit([Bind(Include = "Id,Body,UpdateReason")] Comment comment)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(comment).State = EntityState.Modified;
+                var commentDb = db.Comments.Where(p => p.Id == comment.Id).FirstOrDefault();
+
+                commentDb.Updated = DateTime.Now;
+                commentDb.Body = comment.Body;
+                commentDb.UpdateReason = comment.UpdateReason;
+                
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "BlogPosts", new { slug = commentDb.BlogPost.Slug});
             }
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
+            
             return View(comment);
         }
 
         // GET: Comments/Delete/5
+        [Authorize(Roles ="Admin,Moderator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -112,6 +123,7 @@ namespace BlogApplication
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="Admin,Moderator")]
         public ActionResult DeleteConfirmed(int id)
         {
             Comment comment = db.Comments.Find(id);

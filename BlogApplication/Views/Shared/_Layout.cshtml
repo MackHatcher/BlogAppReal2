@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using BlogApplication.Helpers;
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -54,9 +56,20 @@
                     <li>
                         @if (!User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
                         {
-                            @Html.ActionLink("Admin Login", "Login", "Account")
+                            @Html.ActionLink("Sign in", "Login", "Account")
                         }
-
+                    </li>
+                    
+                    <li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            using (Html.BeginForm("LogOff", "Account", FormMethod.Post))
+                            {@Html.AntiForgeryToken()
+                        <div class="welcome">
+                            <input type="submit" class="logout" value="Logout" title="You are logged in as @User.Identity.GetDisplayName() ." />
+                        </div>   
+                        }
+                    }
                     </li>
                 </ul>
             </div>

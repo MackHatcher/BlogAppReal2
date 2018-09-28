@@ -1,18 +1,30 @@
-﻿@model IEnumerable<BlogApplication.Models.BlogPost>
+﻿@using PagedList;
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css">
+
+@model IEnumerable<BlogApplication.Models.BlogPost>
 
 @{
     ViewBag.Title = "Index";
+    var pagedList = (IPagedList)Model;
 }
 
-<h2>Index</h2>
+<h2>Blog Archive</h2>
 
 <p>
-    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin")) 
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
-    @Html.ActionLink("Create New", "Create")
+        @Html.ActionLink("Create New", "Create")
     }
 
 </p>
+
+@using (Html.BeginForm())
+{
+    <input type="text" name="searchString" class="search" placeholder="Search posts" value="@ViewBag.SearchString"/>
+    <input type="submit" class="btn-primary-search" value="search" />
+}
+
 <table class="table">
     <tr>
         <th>
@@ -24,8 +36,8 @@
         <th>
             @Html.DisplayNameFor(model => model.Title)
         </th>
-        
-        
+
+
         <th>
             @Html.DisplayNameFor(model => model.MediaURL)
         </th>
@@ -35,46 +47,50 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Created)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Updated)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        
-        <td>
-            @if (item.MediaURL != null)
-            {
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
 
-            <img class="img-preview" src="@item.MediaURL" alt="">
-            }
+            <td>
+                @if (item.MediaURL != null)
+                {
 
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Published)
-        </td>
-        <td>
-            <p>
-                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                {
-                    @Html.ActionLink("Edit", "Edit", new { id=item.Id })
+                    <img class="img-preview" src="@item.MediaURL" alt="">
                 }
-            |
-            @Html.ActionLink("View Post", "Details", new { slug = item.Slug }) |
-            
-                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                {
-                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-                }
-            </p>
-            
-        </td>
-    </tr>
-}
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Published)
+            </td>
+
+            <td>
+                <p>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                    }
+                    |
+                    @Html.ActionLink("View Post", "Details", new { slug = item.Slug }) |
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    }
+                </p>
+
+            </td>
+        </tr>
+    }
 
 </table>
+Page @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) of     @pagedList.PageCount
+@Html.PagedListPager(pagedList, page => Url.Action("Index", new { page, ViewBag.searchString }))

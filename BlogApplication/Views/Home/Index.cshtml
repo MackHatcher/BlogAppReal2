@@ -5,12 +5,6 @@
 
 @model IEnumerable<BlogApplication.Models.BlogPost>
 
-
-
-
-
-
-
 <!-- Page Header -->
 <!-- Set your background image for this header on the line below. -->
 <header class="intro-header" style="background-image: url('../../img/home-bg.jpg')">
@@ -34,25 +28,31 @@
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             <div class="post-preview">
-
+                
                 @foreach (var item in Model)
                 {
-                    
                 <h1 class="post-title">
-                    @Html.ActionLink(item.Title, "Index", "BlogPosts")
+                    @Html.ActionLink(item.Title, "Details", "BlogPosts", new { slug = item.Slug }, null)
                 </h1>
-                    <h4 class="post-subtitle">
-                        Created: @item.Created
-                    </h4>
-                    <h4 class="post-subtitle">
-                        Updated:
+                    <div>
+                        <p class="post-subtitle">
+                            Posted on @item.Created.ToString("dd/MM/yyyy HH:mm")
+                        </p>
+
+                    </div>
+                    <div>
                         @if (item.Updated != null)
                         {
-                            @item.Updated
+                        <p class="post-subtitle">
+                            Updated on @item.Updated.Value.ToString("dd/MM/yyyy HH:mm")
+                        </p>
+                            
                         }
+                    </div>
+                        
 
 
-                    </h4>
+                    
                     <p>
                         @if (item.MediaURL != null)
                         {
@@ -61,7 +61,7 @@
                         }
                     </p>
 
-                    @Html.Raw(item.Body)
+                    @Html.Raw(item.Body.Substring(0, 520) + "..." + "   " + @Html.ActionLink("Read Full Post","Details", "BlogPosts", new { slug = item.Slug }, null))
                 }
 
                 <!-- Pager -->
@@ -71,8 +71,8 @@
                     </li>
                 </ul>
             </div>
+        </div>
     </div>
-</div>
 </div>
 
 <hr>
@@ -84,28 +84,28 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <ul class="list-inline text-center">
                     <li>
-                        <a href="#">
+                        <a href="https://www.facebook.com">
                             <span class="fa-stack fa-lg">
                                 <i class="fab fa-facebook-f"></i>
                             </span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="https://www.linkedin.com/in/mackenzie-hatcher-37413316a/">
                             <span class="fa-stack fa-lg">
                                 <i class="fab fa-linkedin-in"></i>
                             </span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="https://github.com/MackHatcher">
                             <span class="fa-stack fa-lg">
                                 <i class="fab fa-github"></i>
                             </span>
                         </a>
                     </li>
                 </ul>
-                <p class="copyright text-muted">Copyright &copy; Your Website 2016</p>
+                <p class="copyright text-muted">Copyright &copy; Your Website 2018</p>
             </div>
         </div>
     </div>

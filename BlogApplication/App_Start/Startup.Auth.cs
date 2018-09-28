@@ -54,15 +54,15 @@ namespace BlogApplication
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "742805239401892",
+               appSecret: "e4f76446f8f1462043d22806037352be");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "767716615797-gvu3vh6ld3vn5tdra1ika3ing3gn6sn2.apps.googleusercontent.com",
+                ClientSecret = "r7wuBWJaWLYpj7hlpyzbvNxv"
+            });
         }
     }
 }

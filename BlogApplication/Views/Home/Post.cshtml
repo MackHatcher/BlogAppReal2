@@ -25,11 +25,62 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <p> @Html.Raw(Model.Body)</p>
             </div>
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin, Moderator"))
+            {
+                <p class="col-md-8">
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+                    @Html.ActionLink("Back to List", "Index")
+                </p>
+            }
+
+
         </div>
     </div>
 </article>
 <hr>
-<!-- Footer -->
+
+<div class="comment-body">
+    <div class="comment-head">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <p>
+                Comments:
+            </p>
+            <div>
+                <img class="avatar-placeholder" src="~/img/profile-placeholder.jpg" />
+                @using (Html.BeginForm("CreateComment", "BlogPosts", FormMethod.Post))
+                {
+                    <input type="hidden" name="slug" value="@Model.Slug" />
+                    <textarea name="body" class="comment-input" placeholder="add a public comment..."></textarea>
+                    <input type="submit" class="comment-submit" value="submit" />
+                }
+            </div>
+        }
+    </div>
+    @foreach (var comment in Model.Comments)
+    {
+        <div class="avatar">
+            <p>
+                @comment.Author.DisplayName posted at @comment.Created.ToString("dd/MM/yyyy HH:mm")
+            </p>
+
+            <img class="comment-avatar-placeholder" src="~/img/profile-placeholder.jpg" />
+
+        </div>
+        <div class="container">
+            <div class="dialogbox">
+                <div class="body">
+                    <span class="tip tip-left"></span>
+                    <div class="message">
+                        <p>
+                            @comment.Body
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
 <footer>
     <div class="container">
         <div class="row">
@@ -62,4 +113,3 @@
         </div>
     </div>
 </footer>
-

@@ -49,6 +49,13 @@ namespace BlogApplication.Migrations
 
                 userManager.Create(adminUser, "Password-1");
             }
+            else
+            {
+                adminUser = context.Users.Where(p => p.UserName == "admin@myblogapp.com")
+                    .FirstOrDefault();
+            }
+
+
             if (!context.Users.Any(p => p.UserName == "mod@myblogapp.com"))
             {
                 modUser = new ApplicationUser();
@@ -62,7 +69,7 @@ namespace BlogApplication.Migrations
             }
             else
             {
-                adminUser = context.Users.Where(p => p.UserName == "admin@myblogapp.com")
+                modUser = context.Users.Where(p => p.UserName == "mod@myblogapp.com")
                     .FirstOrDefault();
             }
 
@@ -72,9 +79,9 @@ namespace BlogApplication.Migrations
             {
                 userManager.AddToRole(adminUser.Id, "Admin");
             }
-            if (!userManager.IsInRole(modUser.Id, "Mod"))
+            if (!userManager.IsInRole(modUser.Id, "Moderator"))
             {
-                userManager.AddToRole(modUser.Id, "Mod");
+                userManager.AddToRole(modUser.Id, "Moderator");
             }
         }
     }

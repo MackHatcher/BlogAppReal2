@@ -4,54 +4,114 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>BlogPost</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.MediaURL)
-        </dt>
-
-        <dd>
-            @if (Model.MediaURL != null)
+<!-- Page Header -->
+<!-- Set your background image for this header on the line below. -->
+<header class="intro-header" style="background-image: url('@Model.MediaURL')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>@Html.DisplayFor(model => model.Title)</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by Mack Hatcher on @Html.DisplayFor(model => model.Created)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p> @Html.Raw(Model.Body)</p>
+            </div>
+            @if(User.Identity.IsAuthenticated && User.IsInRole("Admin, Moderator"))
             {
-
-                <img class="img-preview" src="@Model.MediaURL" alt="">
+                <p class="col-md-8">
+                @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+                @Html.ActionLink("Back to List", "Index")
+                </p>
             }
+            
 
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
+        </div>
+    </div>
+</article>
+<hr>
 
-        <dd>
-            @Html.DisplayFor(model => model.Created)
-        </dd>
+<div class="comment-body">
+    <div class="comment-head">
+        @if (User.Identity.IsAuthenticated)
+        {
+         
+            <div class="add-comment">
+                
+                @using (Html.BeginForm("CreateComment", "BlogPosts", FormMethod.Post))
+                {
+                    <img class="avatar-placeholder" src="~/img/profile-placeholder.jpg" />
+                    <input type="hidden" name="slug" value="@Model.Slug" />
+                    <textarea name="body" class="comment-input" placeholder="add a public comment..."></textarea>
+                    <input type="submit" class="comment-submit" value="submit" />
+                }
+            </div>
+        }
+    </div>
+    @foreach (var comment in Model.Comments)
+    {
+        <div class="avatar">
+            <p class="display-name">
+                @comment.Author.DisplayName
+            </p>
+            <p class="comment-date">
+                @comment.Created.ToString("dd/MM/yyyy HH:mm")
+            </p>
+            <img class="comment-avatar-placeholder" src="~/img/profile-placeholder.jpg" />
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Updated)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Updated)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Body)
-        </dt>
-        <dd class="col-md-10">
-            @Html.Raw(Model.Body)
-        </dd>
-    </dl>
+        </div>
+        <div class="container">
+            <div class="dialogbox">
+                <div class="body">
+                    <span class="tip tip-left"></span>
+                    <div class="message">
+                        <p>
+                            @comment.Body
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
-<p class="col-md-8">
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="http://www.facebook.com/">
+                            <span class="fa-stack fa-lg">
+                                <i class="fab fa-facebook-f"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.linkedin.com/in/mackenzie-hatcher-37413316a/">
+                            <span class="fa-stack fa-lg">
+                                <i class="fab fa-linkedin-in"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/MackHatcher">
+                            <span class="fa-stack fa-lg">
+                                <i class="fab fa-github"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Your Website 2016</p>
+            </div>
+        </div>
+    </div>
+</footer>
