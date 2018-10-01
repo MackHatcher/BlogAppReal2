@@ -39,17 +39,17 @@
     </div>
 </article>
 <hr>
-
 <div class="comment-body">
     <div class="comment-head">
         @if (User.Identity.IsAuthenticated)
         {
-         
-            <div class="add-comment">
-                
+            <p>
+                Comments:
+            </p>
+            <div>
+                <img class="avatar-placeholder" src="~/img/profile-placeholder.jpg" />
                 @using (Html.BeginForm("CreateComment", "BlogPosts", FormMethod.Post))
                 {
-                    <img class="avatar-placeholder" src="~/img/profile-placeholder.jpg" />
                     <input type="hidden" name="slug" value="@Model.Slug" />
                     <textarea name="body" class="comment-input" placeholder="add a public comment..."></textarea>
                     <input type="submit" class="comment-submit" value="submit" />
@@ -60,12 +60,10 @@
     @foreach (var comment in Model.Comments)
     {
         <div class="avatar">
-            <p class="display-name">
-                @comment.Author.DisplayName
+            <p>
+                @comment.Author.DisplayName posted at @comment.Created.ToString("dd/MM/yyyy HH:mm")
             </p>
-            <p class="comment-date">
-                @comment.Created.ToString("dd/MM/yyyy HH:mm")
-            </p>
+
             <img class="comment-avatar-placeholder" src="~/img/profile-placeholder.jpg" />
 
         </div>
@@ -82,8 +80,7 @@
             </div>
         </div>
     }
-</div>
-<footer>
+</div><footer>
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
